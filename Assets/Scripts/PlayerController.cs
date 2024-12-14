@@ -3,7 +3,7 @@ using Unity.Netcode;
 using UnityEngine.InputSystem;
 using Vector3 = UnityEngine.Vector3;
 
-public class PlayerController : NetworkBehaviour
+public class PlayerController : MonoBehaviour
 {
     [Header("Movement")]
     public float playerSpeed = 1f;
@@ -30,15 +30,15 @@ public class PlayerController : NetworkBehaviour
 
     void Update()
     {
-        if (!IsLocalPlayer) return;
-
         HandleInput();
 
         if (isGrounded)
             rb.linearDamping = groundDrag;
         else
-            rb.linearDamping = 0;
+            rb.linearDamping = airMultiplier;
 
+        
+        moveDirection.y = 0;
         rb.AddForce(moveDirection.normalized * playerSpeed, ForceMode.Force);
 
         if (isGrounded && Keyboard.current.spaceKey.isPressed && readyToJump)
@@ -55,7 +55,7 @@ public class PlayerController : NetworkBehaviour
         float inputX = (Keyboard.current.dKey.isPressed ? 1 : 0) - (Keyboard.current.aKey.isPressed ? 1 : 0);
         float inputY = (Keyboard.current.sKey.isPressed ? 1 : 0) - (Keyboard.current.wKey.isPressed ? 1 : 0);
 
-        moveDirection = orientation.forward * inputY + orientation.right * inputX;
+        moveDirection = orientation.forward * inputY - orientation.right * inputX;
 
         UpdateMoveDirectionServerRpc(moveDirection);
     }

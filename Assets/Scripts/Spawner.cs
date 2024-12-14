@@ -12,6 +12,7 @@ public class Spawner : MonoBehaviour
     public int wavesBtwnTiers =5;
     int currentTier = 1;
     public Vector3 destination;
+    public int activeTier = 1;
 
     public static List<GameObject> aliveEnemies = new List<GameObject>();
     void Start()
@@ -24,7 +25,7 @@ public class Spawner : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(aliveEnemies.Count == 0)
+        if(aliveEnemies.Count == 0 && currentTier == activeTier)
         {
             switch(currentTier)
             {

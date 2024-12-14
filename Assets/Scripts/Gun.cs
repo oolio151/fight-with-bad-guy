@@ -4,38 +4,65 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class Sword : MonoBehaviour
+public class Gun : MonoBehaviour
 {
     [Header("Setup")]
-    public GameObject swordPrefab;
+    public GameObject bulletPrefab;
+    public TextMeshPro ammoText;
+    public Transform bulletOrigin;
     public Transform player;
+
+    [Header("Bullet Stats")]
+    public float bulletSpeed;
+
+    [Header("Magazine")]
+    public int maxAmmoPerMag;
+    public int ammoInMag;
+    int ammoInStock;
+
+    [Header("Shooting")]
+    public float timeBetweenShots;
+    bool readyToShoot;
+
+    [Header("Reloading")]
+    public float reloadTime;
+    public bool reloading;
+
     float currentLerpTime;
-    bool readyToSwing;
 
     int enemiesKilled;
-    int reloadTime;
-    bool reloading;
 
     // Start is called before the first frame update
     void Start()
     {
+        readyToShoot = true;
+
+        //testing purposes only
+        ammoInMag = 30;
+        ammoInStock = 60;
         player = GetComponentInParent<Transform>();
-        reloadTime = 2;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.R) && !reloading)
+        ammoText.text = ammoInMag.ToString() + "/" + ammoInStock.ToString();
+        if (Input.GetKeyDown(KeyCode.R) && !reloading && ammoInMag < maxAmmoPerMag && ammoInStock > 0)
             reloading = true;
-        if (reloading) Reload();
+        if (reloading ) Reload();
 
-        if (Input.GetKeyDown(KeyCode.F) && readyToSwing)
+        if (Input.GetAxis("Fire") > 0.1 && ammoInMag > 0 && readyToShoot)
         {
-            Swing();
+            Shoot();
         }
+            
     }
 
+    public void ExReload()
+    {
+        if (!reloading && ammoInMag < maxAmmoPerMag && ammoInStock > 0)
+            reloading = true;
+    }
     void Reload()
     {
         currentLerpTime += Time.deltaTime;
@@ -44,21 +71,34 @@ public class Sword : MonoBehaviour
             currentLerpTime = reloadTime;
         }
 
+        
+
         //lerp!
         float perc = currentLerpTime / reloadTime;
         transform.localEulerAngles = Vector3.Lerp(new Vector3(90, 0, -90), new Vector3(450, 0, -90), perc);
         if(perc >= 1)
         {
-
+            reloading = false;
+            currentLerpTime = 0;
+            if(ammoInStock > maxAmmoPerMag)
+            {
+                ammoInStock -= maxAmmoPerMag - ammoInMag;
+                ammoInMag += maxAmmoPerMag - ammoInMag;
+            } else
+            {
+                ammoInMag += ammoInStock;
+                ammoInStock = 0;
+            }
+            
         }
     }
 
     void ResetShot()
     {
-        readyToSwing = true;
+        readyToShoot = true;
     }
 
-    void Swing()
+    void Shoot()
     {
         Camera camera = GetComponentInParent<Camera>();
         Ray ray = new Ray(camera.transform.position, camera.transform.forward);
@@ -75,7 +115,7 @@ public class Sword : MonoBehaviour
                 hit.transform.GetComponent<MeshRenderer>().enabled = false;
                 hit.transform.GetComponent<CapsuleCollider>().enabled = false;
                 hit.transform.GetComponent<PlayerController>().enabled = false;
-                // hit.transform.GetComponentInChildren<CameraController>().enabled = false;
+                hit.transform.GetComponentInChildren<CameraController>().enabled = false;
                 hit.transform.GetComponent<Rigidbody>().useGravity = false;
                 enemiesKilled++;
                 if(enemiesKilled >= 3)
@@ -90,7 +130,13 @@ public class Sword : MonoBehaviour
             lookAtPoint = camera.transform.position + camera.transform.forward * 300f;
         }
 
-        readyToSwing = false;
+
+        ammoInMag--;
+        GameObject neue = Instantiate(bulletPrefab, bulletOrigin.position, Quaternion.identity);
+        neue.GetComponent<Rigidbody>().linearVelocity = (lookAtPoint-bulletOrigin.position).normalized * bulletSpeed;
+        Destroy(neue , 10f);
+        readyToShoot = false;
+        Invoke("ResetShot", timeBetweenShots);
     }
 
     void Leave()

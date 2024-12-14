@@ -3,7 +3,7 @@ using Unity.Netcode;
 using UnityEngine.InputSystem;
 using Vector3 = UnityEngine.Vector3;
 
-public class PlayerController : NetworkBehaviour
+public class PlayerController : MonoBehaviour
 {
     [Header("Movement")]
     public float playerSpeed = 1f;
@@ -30,7 +30,7 @@ public class PlayerController : NetworkBehaviour
 
     void Update()
     {
-        if (!IsLocalPlayer) return;
+        // if (!IsLocalPlayer) return;
 
         HandleInput();
 

@@ -26,6 +26,10 @@ public class Sword : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        swordPrefab.transform.SetParent(player);
+        swordPrefab.transform.localScale = Vector3.one;
+        swordPrefab.transform.localPosition = Vector3.zero;
+
         if (Input.GetKeyDown(KeyCode.R) && !reloading)
             reloading = true;
         if (reloading) Reload();

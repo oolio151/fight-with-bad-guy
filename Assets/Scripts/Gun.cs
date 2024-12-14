@@ -133,7 +133,7 @@ public class Gun : MonoBehaviour
 
         ammoInMag--;
         GameObject neue = Instantiate(bulletPrefab, bulletOrigin.position, Quaternion.identity);
-        neue.GetComponent<Rigidbody>().velocity = (lookAtPoint-bulletOrigin.position).normalized * bulletSpeed;
+        neue.GetComponent<Rigidbody>().linearVelocity = (lookAtPoint-bulletOrigin.position).normalized * bulletSpeed;
         Destroy(neue , 10f);
         readyToShoot = false;
         Invoke("ResetShot", timeBetweenShots);

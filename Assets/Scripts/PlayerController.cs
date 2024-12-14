@@ -1,77 +1,117 @@
 using UnityEngine;
+#if NEW_INPUT_SYSTEM_INSTALLED
 using UnityEngine.InputSystem;
+#endif
 using Unity.Netcode;
 
 public class PlayerController : NetworkBehaviour
 {
     [Header("Movement")]
-    public float playerSpeed = 5f;
-    public float jumpForce = 5f;
-    public float groundCheckDistance = 0.5f;
+    public float Speed = 5f;
+    public float JumpForce = 5f;
+    public float GroundCheckDistance = 0.5f;
 
-    [Header("Physics")]
     private Rigidbody rb;
     private bool isGrounded;
-
-    private Vector3 moveDirection;
 
     private void Start()
     {
         if (!IsOwner) return;
 
         rb = GetComponent<Rigidbody>();
-        rb.freezeRotation = true;
+        if (rb == null)
+        {
+            Debug.LogError("Rigidbody component is missing on the player object.");
+        }
     }
 
     private void Update()
     {
-        if (!IsOwner) return;
+        // Ensure only the owner can control this player
+        if (!IsOwner || !IsSpawned) return;
 
-        HandleInput();
         CheckGrounded();
     }
 
     private void FixedUpdate()
     {
-        if (!IsOwner) return;
+        // Ensure only the owner can control this player
+        if (!IsOwner || rb == null) return;
 
-        MovePlayer();
+        HandleMovement();
     }
 
-    private void HandleInput()
+    private void HandleMovement()
     {
-        // Movement inputs using Keyboard.current
-        float moveX = 0f;
-        float moveZ = 0f;
+        float multiplier = Speed;
+        Vector3 moveDirection = Vector3.zero;
 
-        if (Keyboard.current.wKey.isPressed) moveZ = 1f;    // Forward
-        if (Keyboard.current.sKey.isPressed) moveZ = -1f;   // Backward
-        if (Keyboard.current.dKey.isPressed) moveX = 1f;    // Right
-        if (Keyboard.current.aKey.isPressed) moveX = -1f;   // Left
+#if ENABLE_INPUT_SYSTEM && NEW_INPUT_SYSTEM_INSTALLED
+        if (Keyboard.current != null)
+        {
+            if (Keyboard.current.aKey.isPressed)
+            {
+                moveDirection += Vector3.left;
+            }
+            if (Keyboard.current.dKey.isPressed)
+            {
+                moveDirection += Vector3.right;
+            }
+            if (Keyboard.current.wKey.isPressed)
+            {
+                moveDirection += Vector3.forward;
+            }
+            if (Keyboard.current.sKey.isPressed)
+            {
+                moveDirection += Vector3.back;
+            }
 
-        moveDirection = new Vector3(moveX, 0f, moveZ).normalized;
+            // Handle jumping
+            if (Keyboard.current.spaceKey.wasPressedThisFrame && isGrounded)
+            {
+                Jump();
+            }
+        }
+#else
+        if (Input.GetKey(KeyCode.A))
+        {
+            moveDirection += Vector3.left;
+        }
+        if (Input.GetKey(KeyCode.D))
+        {
+            moveDirection += Vector3.right;
+        }
+        if (Input.GetKey(KeyCode.W))
+        {
+            moveDirection += Vector3.forward;
+        }
+        if (Input.GetKey(KeyCode.S))
+        {
+            moveDirection += Vector3.back;
+        }
 
-        // Jump Input
-        if (Keyboard.current.spaceKey.wasPressedThisFrame && isGrounded)
+        // Handle jumping
+        if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
         {
             Jump();
         }
-    }
+#endif
 
-    private void MovePlayer()
-    {
-        // Apply movement
-        Vector3 moveVector = transform.forward * moveDirection.z + transform.right * moveDirection.x;
-        rb.AddForce(moveVector * playerSpeed, ForceMode.Force);
+        // Apply movement using AddForce
+        rb.AddForce(moveDirection.normalized * multiplier, ForceMode.Force);
     }
 
     private void Jump()
     {
-        rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+        // Apply jump force
+        rb.AddForce(Vector3.up * JumpForce, ForceMode.Impulse);
+        Debug.Log("Jumping");
     }
 
     private void CheckGrounded()
     {
-        isGrounded = Physics.Raycast(transform.position, Vector3.down, groundCheckDistance + 0.1f);
+        // Perform a ground check using Raycast
+        isGrounded = Physics.Raycast(transform.position, Vector3.down, GroundCheckDistance + 0.1f);
+        Debug.Log($"IsGrounded: {isGrounded}");
     }
 }

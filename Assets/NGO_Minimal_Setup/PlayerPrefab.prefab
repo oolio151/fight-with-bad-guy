@@ -183,7 +183,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2370292778549700276}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 455521db0066b4b4280c34d2fdba6763, type: 3}
   m_Name: 
@@ -217,16 +217,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ShowTopMostFoldoutHeaderGroup: 1
   playerSpeed: 1
-  groundLinearDamping: 0
-  airMultiplier: 0
-  playerHeight: 0
-  ground:
-    serializedVersion: 2
-    m_Bits: 0
-  orientation: {fileID: 0}
-  jumpCooldown: 0
   jumpForce: 1
-  playerInput: {fileID: 524083186509617475}
+  groundCheckDistance: 0.5
 --- !u!54 &6323055160829681499
 Rigidbody:
   m_ObjectHideFlags: 0

@@ -18,7 +18,6 @@ public class WallHealth : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Debug.Log(health);
         healthText.text = health.ToString() + " / " + maxHealth.ToString();
         healthbar.fillAmount = (float)health/maxHealth;
     }

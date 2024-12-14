@@ -498,11 +498,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tier1:
   - {fileID: 8281328934891373111, guid: 96d68fc022ac0bb4798a9aed3cbd4bcd, type: 3}
-  tier2: []
-  tier3: []
-  tier4: []
+  - {fileID: 8281328934891373111, guid: 2eb01d783e7cbc74384a5c8f356bff5c, type: 3}
+  - {fileID: 8281328934891373111, guid: 39629f760bc640447ace852d36f87e40, type: 3}
+  tier2:
+  - {fileID: 8281328934891373111, guid: 2eb01d783e7cbc74384a5c8f356bff5c, type: 3}
+  - {fileID: 8281328934891373111, guid: 196fcfb98de587a4897c9778112ed629, type: 3}
+  tier3:
+  - {fileID: 0}
+  tier4:
+  - {fileID: 0}
   wavesBtwnTiers: 5
-  destination: {x: 25, y: 0, z: 0}
+  currentTier: 1
+  wave: 1
+  destination: {x: 0, y: 0, z: 0}
+  activeTier: 1
+  numSpawners: 10
 --- !u!4 &1069458290
 Transform:
   m_ObjectHideFlags: 0
@@ -512,7 +522,7 @@ Transform:
   m_GameObject: {fileID: 1069458288}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -15.7, y: 1.1, z: 0}
+  m_LocalPosition: {x: 0, y: 1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -743,7 +753,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 5, y: 1, z: 1}
+  m_LocalScale: {x: 5, y: 1, z: 5}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -930,8 +940,8 @@ Transform:
   m_GameObject: {fileID: 1879088647}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 24.8, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 13.56, z: 13.49}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 13.56, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}

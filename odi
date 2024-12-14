@@ -1,0 +1,85 @@
+[33mcommit 84370379af1e41d0caa005a8bc413bfec792ccd7[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m)[m
+Merge: c9b12ed 5c630e8
+Author: Prakhar Thapliyal <thapliyal.prakhar@gmail.com>
+Date:   Sat Dec 14 14:54:44 2024 -0500
+
+    fix merge
+
+[33mcommit 5c630e86461245f2bfd86f81fda9fee9c643e160[m[33m ([m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m
+Merge: c5a0272 01470ae
+Author: Teja <tanuma257@gmail.com>
+Date:   Sat Dec 14 14:28:23 2024 -0500
+
+    Merge branch 'main' of https://github.com/oolio151/fight-with-bad-guy
+
+[33mcommit c5a0272e66f921cece43b83de426a1bfdb75612c[m
+Author: Teja <tanuma257@gmail.com>
+Date:   Sat Dec 14 14:27:53 2024 -0500
+
+    map scene
+
+[33mcommit 01470ae1be99f54afd3ecbe26056124902c64d79[m
+Author: Varun Sammeta <diamondblazer59@gmail.com>
+Date:   Sat Dec 14 14:26:25 2024 -0500
+
+    title
+
+[33mcommit c9b12edcb6b691f8d0c7614325d61d8001be0044[m
+Author: Prakhar Thapliyal <thapliyal.prakhar@gmail.com>
+Date:   Sat Dec 14 14:13:46 2024 -0500
+
+    Added player
+
+[33mcommit 064635867c0464995659cf5a8da95d9eb67c084f[m[33m ([m[1;31morigin/opguy2000/player[m[33m)[m
+Author: Varun Sammeta <diamondblazer59@gmail.com>
+Date:   Sat Dec 14 13:56:17 2024 -0500
+
+    teja anumalasetty
+
+[33mcommit 23ce78d04cfd995af3d1d3b42290cbfe15447a58[m
+Author: Varun Sammeta <diamondblazer59@gmail.com>
+Date:   Sat Dec 14 13:43:13 2024 -0500
+
+    spawning
+
+[33mcommit afea73dbb9175f4d8f3b604af38d5847bcb58440[m
+Author: Varun Sammeta <diamondblazer59@gmail.com>
+Date:   Sat Dec 14 13:17:15 2024 -0500
+
+    enemies
+
+[33mcommit afa969379ec3cf8984825f440605ef9fcffb5856[m
+Author: Varun Sammeta <diamondblazer59@gmail.com>
+Date:   Sat Dec 14 12:34:08 2024 -0500
+
+    removed multiplayer
+
+[33mcommit 2650b26e17ec9d2ee4ae64bea73e194afdbe30b8[m
+Author: Varun Sammeta <diamondblazer59@gmail.com>
+Date:   Sat Dec 14 11:58:27 2024 -0500
+
+    fhd
+
+[33mcommit eeb9f2a96a7f2958a7ba577d7c47394dcd66aae3[m
+Author: Varun Sammeta <diamondblazer59@gmail.com>
+Date:   Sat Dec 14 11:08:30 2024 -0500
+
+    i hate network code
+
+[33mcommit d1be1a787f07c7598a19acd86fd7c322049ca6eb[m
+Author: Varun Sammeta <diamondblazer59@gmail.com>
+Date:   Sat Dec 14 10:22:51 2024 -0500
+
+    added multiplayer
+
+[33mcommit 4f8dc9cb76950c705430027e93060025ad4bff91[m
+Author: Varun Sammeta <diamondblazer59@gmail.com>
+Date:   Sat Dec 14 09:46:06 2024 -0500
+
+    first commit
+
+[33mcommit 449187c899c871d4c97710e2c3b6bf5f6ef00d3d[m
+Author: Varun Sammeta <97859173+oolio151@users.noreply.github.com>
+Date:   Sat Dec 14 09:41:27 2024 -0500
+
+    Initial commit

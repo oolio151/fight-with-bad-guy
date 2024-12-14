@@ -35,6 +35,7 @@ public class EnemyAI : MonoBehaviour
 
     private void OnDestroy()
     {
-        Spawner.aliveEnemies.Add(this.gameObject);
+        Debug.Log("dying");
+        Spawner.aliveEnemies.Remove(this.gameObject);
     }
 }

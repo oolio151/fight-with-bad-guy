@@ -5,7 +5,7 @@ using UnityEngine.UI;
 public class WallHealth : MonoBehaviour
 {
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-    public static int health;
+    public static int health = 100;
     int maxHealth;
     public TextMeshProUGUI healthText;
     public Image healthbar;
@@ -18,8 +18,9 @@ public class WallHealth : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        healthText.text = string.Format("%d/%d", health, maxHealth);
-        healthbar.fillAmount = health/maxHealth;
+        Debug.Log(health);
+        healthText.text = health.ToString() + " / " + maxHealth.ToString();
+        healthbar.fillAmount = (float)health/maxHealth;
     }
 
     public static void DealDamage(int damage)

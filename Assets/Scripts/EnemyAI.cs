@@ -29,6 +29,7 @@ public class EnemyAI : MonoBehaviour
         if (collision.gameObject.layer == 6)
         {
             WallHealth.DealDamage(damage);
+            Destroy(gameObject);
         }
     }
 

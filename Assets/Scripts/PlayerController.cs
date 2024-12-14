@@ -1,77 +1,91 @@
 using UnityEngine;
-using UnityEngine.InputSystem;
 using Unity.Netcode;
+using UnityEngine.InputSystem;
+using Vector3 = UnityEngine.Vector3;
 
 public class PlayerController : NetworkBehaviour
 {
     [Header("Movement")]
-    public float playerSpeed = 5f;
-    public float jumpForce = 5f;
-    public float groundCheckDistance = 0.5f;
+    public float playerSpeed = 1f;
+    public float groundDrag;
+    public float airMultiplier;
 
-    [Header("Physics")]
-    private Rigidbody rb;
-    private bool isGrounded;
+    [Header("Ground Check")]
+    public float playerHeight;
+    public LayerMask ground;
+    bool isGrounded;
+    public Transform orientation;
+    Vector3 moveDirection;
+    Rigidbody rb;
 
-    private Vector3 moveDirection;
+    public float jumpCooldown;
+    public float jumpForce = 1f;
+    bool readyToJump = true;
 
-    private void Start()
+    void Start()
     {
-        if (!IsOwner) return;
-
         rb = GetComponent<Rigidbody>();
         rb.freezeRotation = true;
     }
 
-    private void Update()
+    void Update()
     {
-        if (!IsOwner) return;
+        if (!IsLocalPlayer) return;
 
         HandleInput();
-        CheckGrounded();
-    }
 
-    private void FixedUpdate()
-    {
-        if (!IsOwner) return;
+        if (isGrounded)
+            rb.linearDamping = groundDrag;
+        else
+            rb.linearDamping = 0;
 
-        MovePlayer();
+        rb.AddForce(moveDirection.normalized * playerSpeed, ForceMode.Force);
+
+        if (isGrounded && Keyboard.current.spaceKey.isPressed && readyToJump)
+        {
+            Jump();
+            Invoke(nameof(ReadyToJump), jumpCooldown);
+        }
     }
 
     private void HandleInput()
     {
-        // Movement inputs using Keyboard.current
-        float moveX = 0f;
-        float moveZ = 0f;
+        isGrounded = Physics.Raycast(transform.position, Vector3.down, playerHeight * 0.5f + 0.2f, ground);
 
-        if (Keyboard.current.wKey.isPressed) moveZ = 1f;    // Forward
-        if (Keyboard.current.sKey.isPressed) moveZ = -1f;   // Backward
-        if (Keyboard.current.dKey.isPressed) moveX = 1f;    // Right
-        if (Keyboard.current.aKey.isPressed) moveX = -1f;   // Left
+        float inputX = (Keyboard.current.dKey.isPressed ? 1 : 0) - (Keyboard.current.aKey.isPressed ? 1 : 0);
+        float inputY = (Keyboard.current.sKey.isPressed ? 1 : 0) - (Keyboard.current.wKey.isPressed ? 1 : 0);
 
-        moveDirection = new Vector3(moveX, 0f, moveZ).normalized;
+        moveDirection = orientation.forward * inputY + orientation.right * inputX;
 
-        // Jump Input
-        if (Keyboard.current.spaceKey.wasPressedThisFrame && isGrounded)
+        UpdateMoveDirectionServerRpc(moveDirection);
+    }
+
+    [ServerRpc]
+    private void UpdateMoveDirectionServerRpc(Vector3 direction)
+    {
+        moveDirection = direction;
+    }
+
+    private void SpeedControl()
+    {
+        Vector3 flatVel = new Vector3(rb.linearVelocity.x, 0f, rb.linearVelocity.z);
+
+        if (flatVel.magnitude > playerSpeed)
         {
-            Jump();
+            Vector3 limitedVel = flatVel.normalized * playerSpeed;
+            rb.linearVelocity = new Vector3(limitedVel.x, rb.linearVelocity.y, limitedVel.z);
         }
     }
 
-    private void MovePlayer()
+    void Jump()
     {
-        // Apply movement
-        Vector3 moveVector = transform.forward * moveDirection.z + transform.right * moveDirection.x;
-        rb.AddForce(moveVector * playerSpeed, ForceMode.Force);
-    }
-
-    private void Jump()
-    {
+        rb.linearVelocity = new Vector3(rb.linearVelocity.x, 0f, rb.linearVelocity.z);
         rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+        readyToJump = false;
     }
 
-    private void CheckGrounded()
+    void ReadyToJump()
     {
-        isGrounded = Physics.Raycast(transform.position, Vector3.down, groundCheckDistance + 0.1f);
+        readyToJump = true;
     }
 }
